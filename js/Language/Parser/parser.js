@@ -279,9 +279,11 @@ class Parser{
         let else_case = null
 
         if (this.currentToken.matches(TOKENS.TT_KEYWORD, 'ELIF')){
-            all_cases = res.register(this.ifExprB())
+            const all_cases = res.register(this.ifExprB())
             if(res.error) return res
-            [cases, else_case] = all_cases
+            const [newCase, newElse_case] = all_cases
+            cases = newCase
+            else_case = newElse_case
         }
         else{
             else_case = res.register(this.ifExprC())
