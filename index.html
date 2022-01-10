@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" data-name="vs/editor/editor.main"
+    href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.26.1/min/vs/editor/editor.main.min.css">
+    <title>Basic Script</title>
+</head> 
+<body>
+    <div class="App">
+        <div class="run"><button id="runEditor">Run</button></div>
+        <div id="editor" style="height:100%;border:1px solid black;"></div>
+        <div class="containerCliApp">
+            <div>
+                <div>
+                    <h2>TERMINAL</h2>
+                </div>
+                <div id="CliApp"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- editor -->
+    <script>
+        var require = { paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.26.1/min/vs' } }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.26.1/min/vs/loader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.26.1/min/vs/editor/editor.main.nls.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.26.1/min/vs/editor/editor.main.js"></script>
+    <!-- 
+        VAR a = 10
+        VAR i = 0
+        FOR i=0 TO 10 THEN VAR a = i + 1
+        a
+
+     -->
+    <!-- my code -->
+    <script src="./js/Language/basicScript.js" type="module"></script>
+</body>
+</html>
