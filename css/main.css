@@ -49,6 +49,7 @@ body{
 
 #CliApp > div{
     font-size: 20px !important;
+    display: flex;
 }
 
 
@@ -56,9 +57,6 @@ body{
     color: blue;
     font-size: 20px;
     font-weight:800
-}
-.colorSpace{
-    color: black !important
 }
 
 #CliApp input{

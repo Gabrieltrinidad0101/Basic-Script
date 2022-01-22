@@ -4,7 +4,7 @@ class Editor{
         if(!editor){
             //create
             this.editor = monaco.editor.create(document.getElementById('editor'), {
-                language: 'plaintext',
+                language: 'BASIC',
                 theme: 'vs-dark',
             });
 
@@ -44,9 +44,6 @@ class Editor{
         this.editor.executeEdits("hola mundo",[op])
     }
 
-    getLine(line){
-        return this.editor.getModel().getLineContent(line)
-    }
 }
 
 
