@@ -4,6 +4,7 @@ import run from "./language/run.js"
 const editor = new Editor()
 const cli = new CLI()
 
+
 cli.run(async text =>{
     if(text === "") return
     languaje(text)

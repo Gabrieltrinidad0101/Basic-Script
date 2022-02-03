@@ -1,2 +1,2 @@
-const KEYWORD = ["VAR","AND","OR","NOT", "IF","THEN","ELIF","ELSE"]
+const KEYWORD = ["VAR","AND","OR","NOT", "IF","THEN","ELIF","ELSE","FOR","TO","STEP","WHILE"]
 export default KEYWORD

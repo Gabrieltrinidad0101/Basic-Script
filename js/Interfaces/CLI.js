@@ -7,34 +7,50 @@ class CLI{
         this.#insertFirstHtml()
 
         //get elements
-        this.input =  document.getElementById("inputCliApp")
+        this.inputText =  document.getElementById("inputCliApp")
         
+        //vars
+        this.isGetInput = false
+
         //events
         this.#keydown()
+
     }
 
     #keydown(){
-        window.addEventListener("keydown",e=>{
-            if(this.input === document.activeElement && 13 == e.keyCode && (!this.isGetInput || getInput)){
-                this.fn(this.input.value);
-                this.newInput()      
+        window.addEventListener("keydown",async e=>{
+            if(this.inputText === document.activeElement && 13 == e.keyCode && !this.isGetInput){
+                await this.fn(this.inputText.value);
+                this.newInputText()      
             }
         })
     }
 
-    newInput(simbol=">"){        
+    newInputText(simbol=">"){        
         const div = document.createElement("div");
         div.innerHTML = `<span>${simbol} <span>`
         
-        this.input = document.createElement("input")
-        this.input.id = this.id
-        this.input.autocomplete="off"
+        this.inputText = document.createElement("input")
+        this.inputText.id = this.id
+        this.inputText.autocomplete="off"
         
-        div.appendChild(this.input)
+        div.appendChild(this.inputText)
         this.container.appendChild(div)
 
-        this.input.focus()
+        this.inputText.focus()
     }
+
+    input = text => new Promise(res=>{
+        this.inputText.disabled = true
+        this.newInputText(text)      
+        this.isGetInput = true
+        window.addEventListener("keydown",e=>{
+            if(this.inputText === document.activeElement && 13 == e.keyCode && this.isGetInput){
+                res(this.inputText.value)
+                this.isGetInput = false
+            }
+        })
+    })
 
     #insertFirstHtml(){
         const html =  `
@@ -46,7 +62,7 @@ class CLI{
     }
 
     log(html){
-        this.input.disabled = true
+        this.inputText.disabled = true
         const div = document.createElement("code")
         div.innerText = html
         this.container.appendChild(div)

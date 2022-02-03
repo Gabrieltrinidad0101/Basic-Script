@@ -90,6 +90,14 @@ class Parser{
 
     }
 
+    forExpr(){
+        this.advance()
+        let error = this.eat(TOKENS.TT_KEYWORD,"identifier")
+        if(error) return error
+        const varName = this.currentToken
+
+    }
+
     parse(){
         const result = this.expr()
         if(this.currentToken.type !== TOKENS.TT_EOF && !result.error){
@@ -121,6 +129,10 @@ class Parser{
             const ifExpr = res.register(this.ifExpr())
             if(res.error) return res
             return res.success(ifExpr)
+        }else if(token.matches("FOR",TOKENS.TT_KEYWORD)){
+            const forExp = res.register(this.forExpr)
+            if(res.error) return res
+            return res.success(forExp)
         }
 
         return res.failure(this.makeError("Invelid Syntax","Expected int, float, '+', '-', '(', identifier "))
