@@ -91,9 +91,25 @@ class Parser{
     }
 
     forExpr(){
+        const res = new ParserResult()
         this.advance()
         let error = this.eat(TOKENS.TT_KEYWORD,"identifier")
         if(error) return error
+
+        error = this.eat(TOKENS.TT_EQ,"=")
+        if(error) return error
+        
+        const startValue = res.register(this.expr())
+        if(res.error) return res
+        
+        error = this.eat(TOKENS.TT_KEYWORD,"TO")
+        if(error) return error
+
+        const endValue = res.register(this.expr())
+        if(res.error) return res
+
+        
+
         const varName = this.currentToken
 
     }
