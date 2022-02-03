@@ -30,6 +30,10 @@ class Value{
         return new Value(this.value || other.value)
     }
 
+    isTrue(){
+        return this.value
+    }
+
     toString(){
         return this.value
     }

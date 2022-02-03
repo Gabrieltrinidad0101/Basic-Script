@@ -12,13 +12,14 @@ cli.run(async text =>{
 editor.run(text=>{
     if(text === "") return
     languaje(text)
+    cli.newInput()
 })
 
 function languaje(text){
     const [result,error] = run(text)
     if(error){
         cli.log(error.toString())
-    }else{
+    }else if(result){
         cli.log(result.toString())
     }
 

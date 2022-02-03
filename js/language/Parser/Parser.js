@@ -8,6 +8,7 @@ import UnaryOpNode from "./UnaryOpNode/UnaryOpNode.js"
 import KEYWORD from "../constants/KEYWORD.js"
 import VarAssignNode from "../Variables/VarAssignNode.js"
 import VarAcessNode from "../Variables/VarAcessNode.js"
+import IfNode from "../IF/IfNode.js"
 class Parser{
     constructor(tokens){
         this.tokens = tokens
@@ -37,6 +38,58 @@ class Parser{
         `Expected '${expected}'`)
     } 
 
+    eatMathces(expected){
+        if(this.currentToken.matches(expected,TOKENS.TT_KEYWORD)){
+            this.advance()
+            return
+        }
+        
+        return this.makeError("Invalid Syntax",
+        `Expected '${expected}'`)
+    }
+
+    ifExpr(){
+        const res = new ParserResult()
+        const cases = []
+        let elseCase = null
+        this.advance()
+
+        const condition = res.register(this.expr())
+        if(res.error) return res
+
+        let error = this.eatMathces("THEN")
+        if(error) return error
+
+        const expr = res.register(this.expr())
+        if(res.error) return res
+        cases.push([condition,expr])
+
+        while(this.currentToken.matches("ELIF",TOKENS.TT_KEYWORD)){
+            this.advance()
+            const condition = res.register(this.expr())
+            if(res.error) return res
+
+            let error = this.eatMathces("THEN")
+            if(error) return error
+
+            const expr = res.register(this.expr())
+            cases.push([condition,expr])
+
+            
+        }
+        if(this.currentToken.matches("ELSE",TOKENS.TT_KEYWORD)){
+            this.advance()
+
+            const expr = res.register(this.expr())
+            if(res.error) return res
+
+            elseCase = expr
+        }
+
+        return res.success(new IfNode(cases,elseCase))
+
+    }
+
     parse(){
         const result = this.expr()
         if(this.currentToken.type !== TOKENS.TT_EOF && !result.error){
@@ -64,7 +117,12 @@ class Parser{
         }else if(token.type === TOKENS.TT_IDENTIFIER){
             this.advance()
             return res.success(new VarAcessNode(token))
+        }else if(token.matches("IF",TOKENS.TT_KEYWORD)){
+            const ifExpr = res.register(this.ifExpr())
+            if(res.error) return res
+            return res.success(ifExpr)
         }
+
         return res.failure(this.makeError("Invelid Syntax","Expected int, float, '+', '-', '(', identifier "))
     }
 

@@ -19,6 +19,6 @@ export default function run(text){
     context.symbolTable = symbolTable
     const interpreter = new Interpreter()   
     const result = interpreter.run(ast.node,context)
-    if(result.error) return  [null, result.error]
-    return [result.value.toString(),null]
+    if(result?.error) return  [null, result.error]
+    return [result?.value.toString(),null]
 }
