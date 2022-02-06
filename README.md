@@ -33,25 +33,38 @@ PRINT(d)
 
 # If statement
 VAR a = IF (10 == 10) THEN TRUE ELSE FALSE  **10 > 10 || 10 < 10 || 10 >= 10 || 10 <= 10 || 10 != 10**
+
 PRINT(a)    **TRUE**
 
 IF(10 == 10) THEN
+
     PRINT("TEN IS EQUAL TEN")
+
 END
 
 IF(10 != 10) THEN
+
     PRINT("TEN IS NOT EQUAL TEN")
+
 ELIF(10 == 10) THEN
+
     PRINT("TEN IS EQUAL TEN")
+
 END;
 
 
 IF(10 != 10) THEN
+
     PRINT("TEN IS NOT EQUAL TEN")
+
 ELIF(10 > 10) THEN
+
     PRINT("TEN IS GREATER THAN TEN")
+
 ELSE
+
     PRINT("DEFAULT VALUE")
+
 END;
 
 # Loop
@@ -59,54 +72,75 @@ END;
 ## WHILE
 
 VAR i = 0
+
 WHILE(i < 10) THEN
+
     PRINT(i)
+
     VAR i = i + 1
+
     **BREAK,CONTINUE**
+
 END;
 
 ## FOR
 
 FOR i = 0 TO 10 THEN
+
     PRINT(i)
+
     **BREAK,CONTINUE**
+
 END;
 
 FOR i = 0 TO 10 STEP 2 THEN
+
     PRINT(i)
+
 END;
 
 # Array
+
 VAR a = [1,2,3,4,5]
 
 ## add value
+
 PRINT(a + 6)
 
 ## remove value
+
 PRINT(a - 1)    **remove of index**
 
 ## Get value
+
 PRINT(a / 1)    **get value of index**
 
 ## Contact array
+
 PRINT(a * [6,7,8])
 
 # String
 
 ## add
 VAR a = "hello"
+
 PRINT(a + " world") **hello world**
 
 ## multiply
+
 VAR a = "hello "
+
 PRINT(a * 2) **hello hello**
 
 
 # FUNCTION
 
 FUN a(x,y) THEN
+
     RETURN x + y
+
 END
 
 CLEAR() **clear the console**
+
 PRINT() **PRINT in the console**
