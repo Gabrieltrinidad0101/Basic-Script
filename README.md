@@ -83,10 +83,10 @@ VAR a = [1,2,3,4,5]
 PRINT(a + 6)
 
 ## remove value
-PRINT(a - 1) *remove of index*
+PRINT(a - 1)    *remove of index*
 
 ## Get value
-PRINT(a / 1)  *get value of index*
+PRINT(a / 1)    *get value of index*
 
 ## Contact array
 PRINT(a * [6,7,8])
@@ -95,11 +95,11 @@ PRINT(a * [6,7,8])
 
 ## add
 VAR a = "hello"
-PRINT(a + " world")  *hello world*
+PRINT(a + " world") *hello world*
 
 ## multiply
 VAR a = "hello "
-PRINT(a * 2) > hello hello
+PRINT(a * 2) **hello hello**
 
 
 # FUNCTION
