@@ -10,10 +10,15 @@ PRINT("hello world")
 
 # Create variable
 VAR a = 10
+
 VAR a = "hello world"
+
 VAR a = [1,2,3,4]
+
 VAR a = TRUE
+
 VAR a = FALSE
+
 VAR a = fun Hello()-> "hello"
 
 # Operation number
