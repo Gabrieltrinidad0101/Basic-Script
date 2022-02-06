@@ -26,14 +26,14 @@ VAR a = 1
 
 VAR c = 2
 
-VAR d = a + c *a - c || a * c || a / c*
+VAR d = a + c   **a - c || a * c || a / c**
 
 PRINT(d)
 
 
 # If statement
-VAR a = IF (10 == 10) THEN TRUE ELSE FALSE *10 > 10 || 10 < 10 || 10 >= 10 || 10 <= 10 || 10 != 10*
-PRINT(a) *TRUE* 
+VAR a = IF (10 == 10) THEN TRUE ELSE FALSE  **10 > 10 || 10 < 10 || 10 >= 10 || 10 <= 10 || 10 != 10**
+PRINT(a)    **TRUE**
 
 IF(10 == 10) THEN
     PRINT("TEN IS EQUAL TEN")
@@ -62,14 +62,14 @@ VAR i = 0
 WHILE(i < 10) THEN
     PRINT(i)
     VAR i = i + 1
-    *BREAK,CONTINUE*
+    **BREAK,CONTINUE**
 END;
 
 ## FOR
 
 FOR i = 0 TO 10 THEN
     PRINT(i)
-    *BREAK,CONTINUE*
+    **BREAK,CONTINUE**
 END;
 
 FOR i = 0 TO 10 STEP 2 THEN
@@ -83,10 +83,10 @@ VAR a = [1,2,3,4,5]
 PRINT(a + 6)
 
 ## remove value
-PRINT(a - 1)    *remove of index*
+PRINT(a - 1)    **remove of index**
 
 ## Get value
-PRINT(a / 1)    *get value of index*
+PRINT(a / 1)    **get value of index**
 
 ## Contact array
 PRINT(a * [6,7,8])
@@ -95,7 +95,7 @@ PRINT(a * [6,7,8])
 
 ## add
 VAR a = "hello"
-PRINT(a + " world") *hello world*
+PRINT(a + " world") **hello world**
 
 ## multiply
 VAR a = "hello "
@@ -108,5 +108,5 @@ FUN a(x,y) THEN
     RETURN x + y
 END
 
-CLEAR() > clear the console 
-PRINT() > PRINT in the console 
+CLEAR() **clear the console**
+PRINT() **PRINT in the console**
