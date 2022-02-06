@@ -143,4 +143,4 @@ END
 
 CLEAR() **clear the console**
 
-PRINT() **PRINT in the console**
+PRINT() **show info in the console**
