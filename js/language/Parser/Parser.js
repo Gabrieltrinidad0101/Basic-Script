@@ -143,7 +143,6 @@ class Parser{
         const body = res.register(this.expr())
         if(res.error) return res
 
-
         return res.success(new WhileNode(condition,body))
     }
 
