@@ -10,3 +10,6 @@ class ForNode{
         this.posEnd = this.varNameTok.posEnd
     }
 }
+
+
+export default ForNode;

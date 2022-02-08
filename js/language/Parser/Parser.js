@@ -9,6 +9,8 @@ import KEYWORD from "../constants/KEYWORD.js"
 import VarAssignNode from "../Variables/VarAssignNode.js"
 import VarAcessNode from "../Variables/VarAcessNode.js"
 import IfNode from "../IF/IfNode.js"
+import ForNode from "../For/forNode.js"
+import WhileNode from "../While/whileNode.js"
 class Parser{
     constructor(tokens){
         this.tokens = tokens
@@ -92,15 +94,20 @@ class Parser{
 
     forExpr(){
         const res = new ParserResult()
+        let stepValue = null
         this.advance()
         let error = this.eat(TOKENS.TT_KEYWORD,"identifier")
         if(error) return error
 
-        error = this.eat(TOKENS.TT_EQ,"=")
-        if(error) return error
+        const varName = this.currentToken
+        this.advance()
+
         
         const startValue = res.register(this.expr())
         if(res.error) return res
+        
+        error = this.eat(TOKENS.TT_EQ,"=")
+        if(error) return error
         
         error = this.eat(TOKENS.TT_KEYWORD,"TO")
         if(error) return error
@@ -108,10 +115,36 @@ class Parser{
         const endValue = res.register(this.expr())
         if(res.error) return res
 
-        
+        if(this.currentToken.matches(TOKENS.TT_KEYWORD,"STEP")){
+            this.advance()
+            stepValue = res.register(this.expr())
+            if(res.error) return res
+        }
 
-        const varName = this.currentToken
+        error = this.eat(TOKENS.TT_KEYWORD,"THEN")
+        if(error) return error
 
+        this.advance()
+        body = res.register(this.expr())
+        if(res.error) return res
+
+        return res.success(new ForNode(varName,startValue,endValue,stepValue,body))
+    }
+
+    whileExpr(){
+        const res = new ParserResult()
+
+        const condition = res.register(this.expr())
+        if(res.error) return res
+
+        let error = this.eat(TOKENS.TT_KEYWORD,"THEN")
+        if(error) return error
+
+        const body = res.register(this.expr())
+        if(res.error) return res
+
+
+        return res.success(new WhileNode(condition,body))
     }
 
     parse(){
@@ -146,9 +179,13 @@ class Parser{
             if(res.error) return res
             return res.success(ifExpr)
         }else if(token.matches("FOR",TOKENS.TT_KEYWORD)){
-            const forExp = res.register(this.forExpr)
+            const forExp = res.register(this.forExpr())
             if(res.error) return res
             return res.success(forExp)
+        }else if(token.matches("WHILE",TOKENS.TT_KEYWORD)){
+            const whileExpr = res.register(this.whileExpr())
+            if(res.error) return res
+            return res.success(whileExpr)
         }
 
         return res.failure(this.makeError("Invelid Syntax","Expected int, float, '+', '-', '(', identifier "))

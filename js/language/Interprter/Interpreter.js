@@ -107,6 +107,10 @@ class Interpreter{
         }      
     }
 
+    forNode(node,context){
+        const res = new RTResult()
+    }
+
 }
 
 export default Interpreter
