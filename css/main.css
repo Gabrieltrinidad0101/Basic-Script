@@ -20,10 +20,26 @@ body{
 
 .run > button{
    width:50px;
-   margin-left: calc(100vw - 60px);  
+   position: fixed;
+   left: calc(100vw - 60px);
    background: black;
    color: #fff;
 }
+
+.doc{
+    width:50px;
+    position: fixed;
+    left: calc(100vw - 150px);
+    background: black;
+    border: 1px solid #fff;
+    text-align: center
+}
+
+.doc a{
+    text-decoration: none;
+    color: #fff;
+}
+
 
 .containerCliApp > div{
     height: 100%;
