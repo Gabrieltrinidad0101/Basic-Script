@@ -96,26 +96,24 @@ class Parser{
         const res = new ParserResult()
         let stepValue = null
         this.advance()
-        let error = this.eat(TOKENS.TT_KEYWORD,"identifier")
-        if(error) return error
-
         const varName = this.currentToken
-        this.advance()
 
+        let error = this.eat(TOKENS.TT_IDENTIFIER,"identifier")
+        if(error) return error
+        
+        error = this.eat(TOKENS.TT_EQ,"=")
+        if(error) return error
         
         const startValue = res.register(this.expr())
         if(res.error) return res
         
-        error = this.eat(TOKENS.TT_EQ,"=")
-        if(error) return error
         
         error = this.eat(TOKENS.TT_KEYWORD,"TO")
         if(error) return error
 
         const endValue = res.register(this.expr())
         if(res.error) return res
-
-        if(this.currentToken.matches(TOKENS.TT_KEYWORD,"STEP")){
+        if(this.currentToken.matches("STEP",TOKENS.TT_KEYWORD)){
             this.advance()
             stepValue = res.register(this.expr())
             if(res.error) return res
@@ -124,18 +122,18 @@ class Parser{
         error = this.eat(TOKENS.TT_KEYWORD,"THEN")
         if(error) return error
 
-        this.advance()
-        body = res.register(this.expr())
+        const body = res.register(this.expr())
         if(res.error) return res
-
         return res.success(new ForNode(varName,startValue,endValue,stepValue,body))
     }
 
     whileExpr(){
         const res = new ParserResult()
 
+        this.advance()
         const condition = res.register(this.expr())
         if(res.error) return res
+
 
         let error = this.eat(TOKENS.TT_KEYWORD,"THEN")
         if(error) return error
@@ -239,7 +237,6 @@ class Parser{
             const varName = this.currentToken
             res.failure(this.eat(TOKENS.TT_IDENTIFIER,"VAR"))
             if(res.error) return res
-            console.log(this.currentToken);
             res.failure(this.eat(TOKENS.TT_EQ,"="))
             if(res.error) return res
             

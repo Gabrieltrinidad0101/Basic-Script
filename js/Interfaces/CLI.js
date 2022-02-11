@@ -21,6 +21,7 @@ class CLI{
         window.addEventListener("keydown",async e=>{
             if(this.inputText === document.activeElement && 13 == e.keyCode && !this.isGetInput){
                 await this.fn(this.inputText.value);
+                localStorage.setItem("inputText",this.inputText.value)
                 this.newInputText()      
             }
         })
@@ -55,7 +56,7 @@ class CLI{
     #insertFirstHtml(){
         const html =  `
             <div>
-                <span>> </span> <input type="text" id="inputCliApp" autocomplete="off"></input> 
+                <span>> </span> <input type="text" id="inputCliApp" value="${localStorage.getItem("inputText") ?? ""}" autocomplete="off"></input> 
             </div>
         `
         this.container.innerHTML = html

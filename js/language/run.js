@@ -20,5 +20,5 @@ export default function run(text){
     const interpreter = new Interpreter()   
     const result = interpreter.run(ast.node,context)
     if(result?.error) return  [null, result.error]
-    return [result?.value.toString(),null]
+    return [result.value?.toString(),null]
 }

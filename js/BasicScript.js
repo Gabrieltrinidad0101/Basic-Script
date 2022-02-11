@@ -20,7 +20,7 @@ function languaje(text){
     const [result,error] = run(text)
     if(error){
         cli.log(error.toString())
-    }else if(result){
+    }else if(result !== undefined){
         cli.log(result.toString())
     }
 

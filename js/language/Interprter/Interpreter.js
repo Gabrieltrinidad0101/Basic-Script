@@ -2,8 +2,11 @@ import RTResult from "./RTRsult.js"
 import Error from "../Error/error.js"
 import Number from "../Number/numberType.js"
 import * as TOKENS from "../TOKEN/TT_TOKENS.js"
-import RTError from "../Error/RTError.js"
+import Context from "../Context/context.js"
 class Interpreter{
+    constructor(){
+        this.context = new Context()
+    }
     run(node,context){
         const methodString = node.constructor.name
         const result = this[methodString] ? this[methodString](node,context) : this.methodNoExist(methodString)
@@ -107,10 +110,52 @@ class Interpreter{
         }      
     }
 
-    forNode(node,context){
+    ForNode(node,context){
         const res = new RTResult()
+        const {varNameTok, startValueNode, endValueNode, stepValueNode, bodyNode,} = node
+        const startValue = res.register(this.run(startValueNode,context))
+        if(res.error) return
+
+        const endValue = res.register(this.run(endValueNode,context))
+        if(res.error) return
+
+        let stepValue = new Number(1)
+        if(stepValueNode){
+            stepValue = res.register(this.run(stepValueNode,context))
+            if(res.error) return
+        }   
+        let i = startValue.value
+        let condition = stepValue.value
+        if(stepValue.value >= 0){
+            condition = _=> i < endValue.value
+        }else{
+            condition = _=> i > endValue.value
+        }
+        
+        while(condition()){
+            context.symbolTable.set(varNameTok.value,new Number(i))
+            i += stepValue.value
+
+            res.register(this.run(bodyNode,context))
+            if(res.error) return res
+        }
+
+        return res.success(null)
     }
 
+    WhileNode(node,context){
+        const res = new RTResult()
+        while(true){
+            const condition = res.register(this.run(node.conditionNode,context))
+            if(res.error) return res
+            console.log(condition)
+            if(!condition.isTrue()) break
+
+            res.register(this.run(node.bodyNode,context))
+            if(res.error) return res
+        }
+        return res.success(null)
+    }
 }
 
 export default Interpreter
