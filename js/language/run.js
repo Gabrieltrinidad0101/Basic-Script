@@ -6,7 +6,7 @@ import SymbolTable from "./SymbolTable/SymbolTable.js"
 
 const symbolTable = new SymbolTable()
 
-export default function run(text){
+export default function run(text,file){
     const lexer = new Lexer(text)
     const [tokens,error] = lexer.makeTokens()
     if(error) return [null,error]
@@ -15,7 +15,7 @@ export default function run(text){
     const ast = parser.parse()
     if(ast.error) return [null,ast.error.toString()]
 
-    const context = new Context("<program>")
+    const context = new Context(file)
     context.symbolTable = symbolTable
     const interpreter = new Interpreter()   
     const result = interpreter.run(ast.node,context)

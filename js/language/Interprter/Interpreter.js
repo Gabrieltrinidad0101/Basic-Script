@@ -148,7 +148,6 @@ class Interpreter{
         while(true){
             const condition = res.register(this.run(node.conditionNode,context))
             if(res.error) return res
-            console.log(condition)
             if(!condition.isTrue()) break
 
             res.register(this.run(node.bodyNode,context))

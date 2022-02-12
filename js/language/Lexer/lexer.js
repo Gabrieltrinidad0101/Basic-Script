@@ -36,7 +36,7 @@ class Lexer{
             }else if(this.currentChar === "+"){
                 this.makeTokenType(TOKENS.TT_PLUS)
             }else if(this.currentChar === "-"){
-                this.makeTokenType(TOKENS.TT_MINUS)
+                this.tokens.push(this.makeMinusOrArrow())
             }else if(this.currentChar === "*"){
                 this.makeTokenType(TOKENS.TT_MUL)
             }else if(this.currentChar === "/"){
@@ -47,6 +47,8 @@ class Lexer{
                 this.makeTokenType(TOKENS.TT_LPAREN)
             }else if(this.currentChar === ")"){
                 this.makeTokenType(TOKENS.TT_RPAREN)
+            }else if(this.currentChar === ","){
+                this.makeTokenType(TOKENS.TT_COMMA)
             }else if(this.currentChar === "="){
                 this.tokens.push(this.makeEqual())
             }else if(this.currentChar === ">"){
@@ -133,6 +135,9 @@ class Lexer{
         return this.makeTokenAOrTokenB(TOKENS.TT_LT,TOKENS.TT_LTE,"=")
     }
     
+    makeMinusOrArrow(){
+        return this.makeTokenAOrTokenB(TOKENS.TT_MINUS,TOKENS.TT_ARROW,">")
+    }
 }
 
 

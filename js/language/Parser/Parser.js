@@ -8,13 +8,17 @@ import UnaryOpNode from "./UnaryOpNode/UnaryOpNode.js"
 import KEYWORD from "../constants/KEYWORD.js"
 import VarAssignNode from "../Variables/VarAssignNode.js"
 import VarAcessNode from "../Variables/VarAcessNode.js"
-import IfNode from "../IF/IfNode.js"
-import ForNode from "../For/forNode.js"
-import WhileNode from "../While/whileNode.js"
-class Parser{
+import IfParser from "../IF/ifParser.js"
+import ForParse from "../For/forParser.js"
+import WhileParser from "../While/whileParser.js"
+import MultipleInheritance from "../../help/multipleInheritance.js"
+
+class Parser extends MultipleInheritance{
     constructor(tokens){
+        super(IfParser,ForParse,WhileParser)
         this.tokens = tokens
         this.idx = 0
+        this.TOKENS = TOKENS
         this.advance()
     }
 
@@ -41,7 +45,7 @@ class Parser{
     } 
 
     eatMathces(expected){
-        if(this.currentToken.matches(expected,TOKENS.TT_KEYWORD)){
+        if(this.currentToken.matches(expected,this.TOKENS.TT_KEYWORD)){
             this.advance()
             return
         }
@@ -50,103 +54,9 @@ class Parser{
         `Expected '${expected}'`)
     }
 
-    ifExpr(){
-        const res = new ParserResult()
-        const cases = []
-        let elseCase = null
-        this.advance()
-
-        const condition = res.register(this.expr())
-        if(res.error) return res
-
-        let error = this.eatMathces("THEN")
-        if(error) return error
-
-        const expr = res.register(this.expr())
-        if(res.error) return res
-        cases.push([condition,expr])
-
-        while(this.currentToken.matches("ELIF",TOKENS.TT_KEYWORD)){
-            this.advance()
-            const condition = res.register(this.expr())
-            if(res.error) return res
-
-            let error = this.eatMathces("THEN")
-            if(error) return error
-
-            const expr = res.register(this.expr())
-            cases.push([condition,expr])
-
-            
-        }
-        if(this.currentToken.matches("ELSE",TOKENS.TT_KEYWORD)){
-            this.advance()
-
-            const expr = res.register(this.expr())
-            if(res.error) return res
-
-            elseCase = expr
-        }
-
-        return res.success(new IfNode(cases,elseCase))
-
-    }
-
-    forExpr(){
-        const res = new ParserResult()
-        let stepValue = null
-        this.advance()
-        const varName = this.currentToken
-
-        let error = this.eat(TOKENS.TT_IDENTIFIER,"identifier")
-        if(error) return error
-        
-        error = this.eat(TOKENS.TT_EQ,"=")
-        if(error) return error
-        
-        const startValue = res.register(this.expr())
-        if(res.error) return res
-        
-        
-        error = this.eat(TOKENS.TT_KEYWORD,"TO")
-        if(error) return error
-
-        const endValue = res.register(this.expr())
-        if(res.error) return res
-        if(this.currentToken.matches("STEP",TOKENS.TT_KEYWORD)){
-            this.advance()
-            stepValue = res.register(this.expr())
-            if(res.error) return res
-        }
-
-        error = this.eat(TOKENS.TT_KEYWORD,"THEN")
-        if(error) return error
-
-        const body = res.register(this.expr())
-        if(res.error) return res
-        return res.success(new ForNode(varName,startValue,endValue,stepValue,body))
-    }
-
-    whileExpr(){
-        const res = new ParserResult()
-
-        this.advance()
-        const condition = res.register(this.expr())
-        if(res.error) return res
-
-
-        let error = this.eat(TOKENS.TT_KEYWORD,"THEN")
-        if(error) return error
-
-        const body = res.register(this.expr())
-        if(res.error) return res
-
-        return res.success(new WhileNode(condition,body))
-    }
-
     parse(){
         const result = this.expr()
-        if(this.currentToken.type !== TOKENS.TT_EOF && !result.error){
+        if(this.currentToken.type !== this.TOKENS.TT_EOF && !result.error){
             result.failure(this.makeError(
             "Invalid Syntax",
             "Expected '+','-','*','/'"
@@ -158,44 +68,49 @@ class Parser{
     atom(){
         const res = new ParserResult()
         const token = this.currentToken
-        if(IN(token.type, [TOKENS.TT_INT,TOKENS.TT_FLOAT])){
+        if(IN(token.type, [this.TOKENS.TT_INT,this.TOKENS.TT_FLOAT])){
             this.advance()
             return  res.success(new NumberNode(token))
-        }else if(token.type === TOKENS.TT_LPAREN){
+        }else if(token.type === this.TOKENS.TT_LPAREN){
             this.advance()
             const expr = res.register(this.expr())
             if(res.error) return res
-            res.failure(this.eat(TOKENS.TT_RPAREN,")"))
+            res.failure(this.eat(this.TOKENS.TT_RPAREN,")"))
             if(res.error) return res
             return res.success(expr)
-        }else if(token.type === TOKENS.TT_IDENTIFIER){
+        }else if(token.type === this.TOKENS.TT_IDENTIFIER){
             this.advance()
             return res.success(new VarAcessNode(token))
-        }else if(token.matches("IF",TOKENS.TT_KEYWORD)){
+        }else if(token.matches("IF",this.TOKENS.TT_KEYWORD)){
             const ifExpr = res.register(this.ifExpr())
             if(res.error) return res
             return res.success(ifExpr)
-        }else if(token.matches("FOR",TOKENS.TT_KEYWORD)){
+        }else if(token.matches("FOR",this.TOKENS.TT_KEYWORD)){
             const forExp = res.register(this.forExpr())
             if(res.error) return res
             return res.success(forExp)
-        }else if(token.matches("WHILE",TOKENS.TT_KEYWORD)){
+        }else if(token.matches("WHILE",this.TOKENS.TT_KEYWORD)){
             const whileExpr = res.register(this.whileExpr())
             if(res.error) return res
             return res.success(whileExpr)
+        }else if(token.matches("FUN",this.TOKENS.TT_KEYWORD)){
+            const funExpr = res.register(this.funExpr())
+            if(res.error) return res
+            return res.success(funExpr)
         }
+
 
         return res.failure(this.makeError("Invelid Syntax","Expected int, float, '+', '-', '(', identifier "))
     }
 
     power(){
-        return this.binOp(_=>this.atom(),[TOKENS.TT_POW],_=>this.factor())
+        return this.binOp(_=>this.atom(),[this.TOKENS.TT_POW],_=>this.factor())
     }
 
     factor(){
         const res = new ParserResult()
         const token = this.currentToken
-        if(IN(token.type, [TOKENS.TT_PLUS,TOKENS.TT_MINUS])){
+        if(IN(token.type, [this.TOKENS.TT_PLUS,this.TOKENS.TT_MINUS])){
             this.advance()
             const factor = res.register(this.factor())
             if(res.error) return res
@@ -205,16 +120,16 @@ class Parser{
     }
 
     term(){
-        return this.binOp(_=>this.factor(),[TOKENS.TT_MUL,TOKENS.TT_DIV])
+        return this.binOp(_=>this.factor(),[this.TOKENS.TT_MUL,this.TOKENS.TT_DIV])
     }
 
     arithExpr(){
-        return this.binOp(_=>this.term(),[TOKENS.TT_PLUS,TOKENS.TT_MINUS])
+        return this.binOp(_=>this.term(),[this.TOKENS.TT_PLUS,this.TOKENS.TT_MINUS])
     }
 
     compExpr(){
         const res = new ParserResult()
-        if(this.currentToken.matches(TOKENS.TT_KEYWORD,"NOT")){
+        if(this.currentToken.matches(this.TOKENS.TT_KEYWORD,"NOT")){
             const opTok = this.currentToken
             this.advance()
             const node = res.register(this.compExpr())
@@ -222,7 +137,7 @@ class Parser{
             return res.success(new UnaryOpNode(opTok,node))
         }
 
-        const node = res.register(this.binOp(_=>this.arithExpr(),[TOKENS.TT_EE,TOKENS.TT_NE,TOKENS.TT_GT,TOKENS.TT_LT,TOKENS.TT_GTE,TOKENS.TT_LTE]))
+        const node = res.register(this.binOp(_=>this.arithExpr(),[this.TOKENS.TT_EE,this.TOKENS.TT_NE,this.TOKENS.TT_GT,this.TOKENS.TT_LT,this.TOKENS.TT_GTE,this.TOKENS.TT_LTE]))
         if(res.error){
             return res.failure(this.makeError("Invalid Syntax","Expected int,float, identifier, '+','-','(','NOT'"))
         }
@@ -232,19 +147,19 @@ class Parser{
     
     expr(){
         const res = new ParserResult()
-        if(this.currentToken.matches(KEYWORD[0],TOKENS.TT_KEYWORD)){
+        if(this.currentToken.matches(KEYWORD[0],this.TOKENS.TT_KEYWORD)){
             this.advance()
             const varName = this.currentToken
-            res.failure(this.eat(TOKENS.TT_IDENTIFIER,"VAR"))
+            res.failure(this.eat(this.TOKENS.TT_IDENTIFIER,"VAR"))
             if(res.error) return res
-            res.failure(this.eat(TOKENS.TT_EQ,"="))
+            res.failure(this.eat(this.TOKENS.TT_EQ,"="))
             if(res.error) return res
             
             const expr = res.register(this.expr())
             if(res.error) return res
             return res.success(new VarAssignNode(varName,expr))
         }
-        return this.binOp(_=>this.compExpr(),[[TOKENS.TT_KEYWORD,"AND"],[TOKENS.TT_KEYWORD,"OR"]])
+        return this.binOp(_=>this.compExpr(),[[this.TOKENS.TT_KEYWORD,"AND"],[this.TOKENS.TT_KEYWORD,"OR"]])
     }
 
     binOp(cbA,ops,cbB=null){

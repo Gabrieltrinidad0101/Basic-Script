@@ -7,17 +7,17 @@ const cli = new CLI()
 
 cli.run(async text =>{
     if(text === "") return
-    languaje(text)
+    languaje(text,"CLI")
 })
 
 editor.run(text=>{
     if(text === "") return
-    languaje(text)
+    languaje(text,"<program>")
     cli.newInput()
 })
 
-function languaje(text){
-    const [result,error] = run(text)
+function languaje(text,file){
+    const [result,error] = run(text,file)
     if(error){
         cli.log(error.toString())
     }else if(result !== undefined){
