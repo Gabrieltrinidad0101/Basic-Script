@@ -1,6 +1,6 @@
 import Lexer from "./Lexer/lexer.js"
 import Parser from "./Parser/Parser.js"
-import Interpreter from "./Interprter/Interpreter.js"
+import Interpreter from "./Interpreter/Interpreter.js"
 import Context from "./Context/context.js"
 import SymbolTable from "./SymbolTable/SymbolTable.js"
 

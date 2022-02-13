@@ -6,8 +6,8 @@ import ParserResult from "./parserResult.js"
 import Error from "../Error/error.js"
 import UnaryOpNode from "./UnaryOpNode/UnaryOpNode.js"
 import KEYWORD from "../constants/KEYWORD.js"
-import VarAssignNode from "../Variables/VarAssignNode.js"
-import VarAcessNode from "../Variables/VarAcessNode.js"
+import VarAssignNode from "../Variables/VarAssign/VarAssignNode.js"
+import VarAcessNode from "../Variables/VarAcess/VarAcessNode.js"
 import IfParser from "../IF/ifParser.js"
 import ForParse from "../For/forParser.js"
 import WhileParser from "../While/whileParser.js"
@@ -175,7 +175,6 @@ class Parser extends MultipleInheritance{
             left = new BinOpNode(left,op,right)
         }
         return  res.success(left)
-
     }
 }
 
