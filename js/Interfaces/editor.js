@@ -16,10 +16,10 @@ class Editor{
     
             //events
             runEditor.addEventListener("click",_=> this.cb ? this.cb(this.editor.getValue()) : "")
-            this.editor.onKeyDown(_=> this.#saveData())
+            this.editor.onKeyDown(_=> this.saveData())
             
             //functions
-            this.#getData()
+            this.getData()
         }else{
             this.editor = editor
         }
@@ -28,14 +28,14 @@ class Editor{
 
     run(cb){
         this.cb = cb
-        this.#saveData()
+        this.saveData()
     }
 
-    #saveData(){
+    saveData(){
         localStorage.setItem("code",this.editor.getValue())
     }
 
-    #getData(){
+    getData(){
         var line = this.editor.getPosition();
         var range = new monaco.Range(line.lineNumber, 1, line.lineNumber, 1);
         var id = { major: 1, minor: 1 };             

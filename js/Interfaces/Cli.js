@@ -7,7 +7,7 @@ class CLI{
 
     log(html){
         html = `${html}`
-        html = this.#replace(html)
+        html = this.replace(html)
         if(html === undefined) return
         const div = document.createElement("code")
         div.innerHTML = html
@@ -15,7 +15,7 @@ class CLI{
         this.container.scrollTop = this.container.scrollHeight;
     }
     
-    #replace(html){
+    replace(html){
         return html.replaceAll("\n","<br>")
     }
     
