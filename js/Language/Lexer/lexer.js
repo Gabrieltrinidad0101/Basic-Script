@@ -32,7 +32,7 @@ class Lexer{
                 this.advance()
             }else if (IN(this.current_char,DIGITS + ".")){
                 this.tokens.push(this.make_number())
-            }else if (IN(this.current_char,"\n;")){
+            }else if (IN(this.current_char,"\n\r;")){
                 this.pos.ln += 1
                 this.pos.col = -1
                 this.token(TOKENS.TT_NEWLINE,this.pos)
