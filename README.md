@@ -135,7 +135,7 @@ PRINT(a * 2) **hello hello**
 
 # FUNCTION
 
-FUN a(x,y) THEN
+FUN a(x,y)
 
     RETURN x + y
 
